@@ -70,10 +70,10 @@ public class MainActivity extends Activity {
 
         private void handleGestureSensorEvent(byte[] payload) {
             byte messageCode = payload[0];
-            byte gestureCode = payload[1];
             if (messageCode != MSG_CODE_GESTURE_EVENT) {
                 return;
             }
+            byte gestureCode = payload[1];
             if (gestureCode == GESTURE_CODE_SWIPE_RIGHT_EVENT) {
                 ledStrip.nextColor();
             } else if (gestureCode == GESTURE_CODE_SWIPE_LEFT_EVENT) {
