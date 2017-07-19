@@ -61,7 +61,6 @@ public class MainActivity extends Activity {
                 while ((uart.read(buffer, buffer.length)) > 0) {
                     handleGestureSensorEvent(buffer);
                 }
-
             } catch (IOException e) {
                 Log.e("TUT", "Cannot read device data.", e);
             }
@@ -69,9 +68,9 @@ public class MainActivity extends Activity {
             return true;
         }
 
-        private void handleGestureSensorEvent(byte[] buffer) {
-            byte messageCode = buffer[0];
-            byte gestureCode = buffer[1];
+        private void handleGestureSensorEvent(byte[] payload) {
+            byte messageCode = payload[0];
+            byte gestureCode = payload[1];
             if (messageCode != MSG_CODE_GESTURE_EVENT) {
                 return;
             }
