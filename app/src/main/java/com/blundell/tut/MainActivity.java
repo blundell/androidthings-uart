@@ -59,16 +59,7 @@ public class MainActivity extends Activity {
             try {
                 byte[] buffer = new byte[2];
                 while ((uart.read(buffer, buffer.length)) > 0) {
-                    byte messageCode = buffer[0];
-                    byte gestureCode = buffer[1];
-                    if (messageCode != MSG_CODE_GESTURE_EVENT) {
-                        continue;
-                    }
-                    if (gestureCode == GESTURE_CODE_SWIPE_RIGHT_EVENT) {
-                        ledStrip.nextColor();
-                    } else if (gestureCode == GESTURE_CODE_SWIPE_LEFT_EVENT) {
-                        ledStrip.previousColor();
-                    }
+                    handleGestureSensorEvent(buffer);
                 }
 
             } catch (IOException e) {
@@ -76,6 +67,19 @@ public class MainActivity extends Activity {
             }
 
             return true;
+        }
+
+        private void handleGestureSensorEvent(byte[] buffer) {
+            byte messageCode = buffer[0];
+            byte gestureCode = buffer[1];
+            if (messageCode != MSG_CODE_GESTURE_EVENT) {
+                return;
+            }
+            if (gestureCode == GESTURE_CODE_SWIPE_RIGHT_EVENT) {
+                ledStrip.nextColor();
+            } else if (gestureCode == GESTURE_CODE_SWIPE_LEFT_EVENT) {
+                ledStrip.previousColor();
+            }
         }
 
         @Override
