@@ -25,11 +25,6 @@ public class MainActivity extends Activity {
 
         try {
             PeripheralManagerService service = new PeripheralManagerService();
-
-            for (String s : service.getUartDeviceList()) {
-                Log.d("TUT", s);
-            }
-
             bus = service.openUartDevice(UART_DEVICE);
         } catch (IOException e) {
             throw new IllegalStateException(UART_DEVICE + " cannot be connected to.", e);
