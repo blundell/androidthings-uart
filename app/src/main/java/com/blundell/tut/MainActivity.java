@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
         @Override
         public boolean onUartDeviceDataAvailable(UartDevice uart) {
             try {
-                byte[] buffer = new byte[2];
+                byte[] buffer = new byte[3];
                 while ((uart.read(buffer, buffer.length)) > 0) {
                     handleGestureSensorEvent(buffer);
                 }
