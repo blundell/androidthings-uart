@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    private static final String UART_DEVICE = "UART0";
+    private static final String GESTURE_SENSOR = "UART0";
 
     private final LedStrip ledStrip = new LedStrip();
 
@@ -25,9 +25,9 @@ public class MainActivity extends Activity {
 
         try {
             PeripheralManagerService service = new PeripheralManagerService();
-            bus = service.openUartDevice(UART_DEVICE);
+            bus = service.openUartDevice(GESTURE_SENSOR);
         } catch (IOException e) {
-            throw new IllegalStateException(UART_DEVICE + " cannot be connected to.", e);
+            throw new IllegalStateException(GESTURE_SENSOR + " cannot be connected to.", e);
         }
 
         try {
@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
             bus.setParity(UartDevice.PARITY_NONE);
             bus.setStopBits(1);
         } catch (IOException e) {
-            throw new IllegalStateException(UART_DEVICE + " cannot be configured.", e);
+            throw new IllegalStateException(GESTURE_SENSOR + " cannot be configured.", e);
         }
 
     }
@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
             bus.registerUartDeviceCallback(onUartBusHasData);
             Log.d("TUT", "Register callback");
         } catch (IOException e) {
-            throw new IllegalStateException("Cannot listen for input from " + UART_DEVICE, e);
+            throw new IllegalStateException("Cannot listen for input from " + GESTURE_SENSOR, e);
         }
     }
 
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
         try {
             bus.close();
         } catch (IOException e) {
-            Log.e("TUT", UART_DEVICE + " connection cannot be closed.", e);
+            Log.e("TUT", GESTURE_SENSOR + " connection cannot be closed.", e);
         }
         super.onDestroy();
     }
