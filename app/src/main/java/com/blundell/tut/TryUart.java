@@ -54,52 +54,19 @@ public class TryUart {
     private final UartDeviceCallback onUartBusHasData = new UartDeviceCallback() {
         @Override
         public boolean onUartDeviceDataAvailable(UartDevice uart) {
-            Log.d("TUT", "data available");
             try {
-                byte[] buffer = new byte[32];
-                int count;
-                while ((count = uart.read(buffer, buffer.length)) > 0) {
-                    Log.d("TUT", "read : " + count + " bytes from peripheral");
-
-                    for (byte b : buffer) {
-                        Log.d("TUT", "got: " + b);
-                    }
-
-                    Log.d("TUT", "Msg code " + buffer[0]);
-                    Log.d("TUT", "Matching gesture would be " + (byte) 0xFC);
-
+                byte[] buffer = new byte[8];
+                while ((uart.read(buffer, buffer.length)) > 0) {
                     byte messageCode = buffer[0];
-                    switch (messageCode) {
-                        case (byte) 0xFF:
-                            Log.d("TUT", "Message code: Pen Up");
-                            break;
-                        case (byte) 0xFE:
-                            Log.d("TUT", "Message code: Ranges");
-                            break;
-                        case (byte) 0xFA:
-                            Log.d("TUT", "Message code: X Coordinate");
-                            break;
-                        case (byte) 0xFB:
-                            Log.d("TUT", "Message code: Y Coordinate");
-                            break;
-                        case (byte) 0xFC:
-                            Log.d("TUT", "Message code: Gesture Event");
-
-                            byte gestureCode = buffer[1];
-                            if (gestureCode == 0x01) {
-                                Log.d("TUT", "Swipe Right");
-                                ledStrip.nextColor();
-                            } else if (gestureCode == 0x02) {
-                                Log.d("TUT", "Swipe Left");
-                                ledStrip.previousColor();
-                            }
-
-                            break;
-                        case (byte) 0xF1:
-                            Log.d("TUT", "Message code: ID");
-                            break;
-                        default:
-                            Log.d("TUT", "Unhandled msg code " + messageCode);
+                    if (messageCode == (byte) 0xFC) {
+                        byte gestureCode = buffer[1];
+                        if (gestureCode == 0x01) {
+                            Log.d("TUT", "Swipe Right");
+                            ledStrip.nextColor();
+                        } else if (gestureCode == 0x02) {
+                            Log.d("TUT", "Swipe Left");
+                            ledStrip.previousColor();
+                        }
                     }
                 }
 
@@ -107,7 +74,6 @@ public class TryUart {
                 Log.e("TUT", "Cannot read device data.", e);
             }
 
-            Log.d("TUT", "data consumed");
             return true;
         }
 
