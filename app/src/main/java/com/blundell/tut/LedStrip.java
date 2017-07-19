@@ -41,7 +41,7 @@ class LedStrip {
     }
 
     public void nextColor() {
-        if (++position > Color.RAINBOW.length) {
+        if (++position == Color.RAINBOW.length) {
             position = 0;
         }
         changeColor(Color.RAINBOW[position]);
