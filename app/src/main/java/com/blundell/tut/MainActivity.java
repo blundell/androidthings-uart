@@ -13,6 +13,9 @@ import java.io.IOException;
 public class MainActivity extends Activity {
 
     private static final String GESTURE_SENSOR = "UART0";
+    private static final byte MSG_CODE_GESTURE_EVENT = (byte) 0xFC;
+    private static final byte GESTURE_CODE_SWIPE_RIGHT_EVENT = 0x01;
+    private static final byte GESTURE_CODE_SWIPE_LEFT_EVENT = 0x02;
 
     private final LedStrip ledStrip = new LedStrip();
 
@@ -38,7 +41,6 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             throw new IllegalStateException(GESTURE_SENSOR + " cannot be configured.", e);
         }
-
     }
 
     @Override
@@ -46,7 +48,6 @@ public class MainActivity extends Activity {
         super.onStart();
         try {
             bus.registerUartDeviceCallback(onUartBusHasData);
-            Log.d("TUT", "Register callback");
         } catch (IOException e) {
             throw new IllegalStateException("Cannot listen for input from " + GESTURE_SENSOR, e);
         }
@@ -56,18 +57,17 @@ public class MainActivity extends Activity {
         @Override
         public boolean onUartDeviceDataAvailable(UartDevice uart) {
             try {
-                byte[] buffer = new byte[8];
+                byte[] buffer = new byte[2];
                 while ((uart.read(buffer, buffer.length)) > 0) {
                     byte messageCode = buffer[0];
-                    if (messageCode == (byte) 0xFC) {
-                        byte gestureCode = buffer[1];
-                        if (gestureCode == 0x01) {
-                            Log.d("TUT", "Swipe Right");
-                            ledStrip.nextColor();
-                        } else if (gestureCode == 0x02) {
-                            Log.d("TUT", "Swipe Left");
-                            ledStrip.previousColor();
-                        }
+                    byte gestureCode = buffer[1];
+                    if (messageCode != MSG_CODE_GESTURE_EVENT) {
+                        continue;
+                    }
+                    if (gestureCode == GESTURE_CODE_SWIPE_RIGHT_EVENT) {
+                        ledStrip.nextColor();
+                    } else if (gestureCode == GESTURE_CODE_SWIPE_LEFT_EVENT) {
+                        ledStrip.previousColor();
                     }
                 }
 
