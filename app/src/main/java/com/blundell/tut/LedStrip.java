@@ -2,7 +2,7 @@ package com.blundell.tut;
 
 import android.util.Log;
 
-import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.SpiDevice;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ class LedStrip {
      * Call in on create to connect to the rainbow hat leds
      */
     public void setUp() {
-        PeripheralManagerService service = new PeripheralManagerService();
+        PeripheralManager service = PeripheralManager.getInstance();
         try {
             bus = service.openSpiDevice(APA102_RGB_7_LED_SLAVE);
         } catch (IOException e) {

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.things.pio.PeripheralManagerService;
+import com.google.android.things.pio.PeripheralManager;
 import com.google.android.things.pio.UartDevice;
 import com.google.android.things.pio.UartDeviceCallback;
 
@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         ledStrip.setUp();
 
         try {
-            PeripheralManagerService service = new PeripheralManagerService();
+            PeripheralManager service = PeripheralManager.getInstance();
             bus = service.openUartDevice(GESTURE_SENSOR);
         } catch (IOException e) {
             throw new IllegalStateException(GESTURE_SENSOR + " cannot be connected to.", e);
